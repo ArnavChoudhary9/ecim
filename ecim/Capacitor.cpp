@@ -10,7 +10,7 @@ namespace ecim {
     // Rearranging: V(t) = V(t-dt) + I(t) * dt / C
     // This is equivalent to: I(t) = (C/dt) * V(t) - (C/dt) * V(t-dt)
     // Which looks like a conductance (C/dt) with a current source -(C/dt)*V(t-dt)
-    void Capacitor::Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double dt, int /* vsIndex */) {
+    void Capacitor::Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double dt, int /* vsIndex */, double /* time */) {
         if (dt <= 0.0) return;
 
         double Geq = m_Capacitance / dt;  // Equivalent conductance

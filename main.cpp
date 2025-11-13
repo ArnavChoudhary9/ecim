@@ -13,7 +13,7 @@ int main() {
     Node* node2 = new Node();
 
     // Components: Vsource between ground and node1, R1 between node1-node2, R2 between node2-ground
-    VoltageSource* vs = new VoltageSource(5.0);
+    DCVoltageSource* vs = new DCVoltageSource(5.0);
     Resistor* r1 = new Resistor(2000.0);
     Resistor* r2 = new Resistor(3000.0);
     

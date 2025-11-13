@@ -1,10 +1,7 @@
 #include "VoltageSource.hpp"
 
 namespace ecim {
-    VoltageSource::VoltageSource(double voltage) 
-        : m_Voltage(voltage), m_Current(0.0) {}
-
-    void VoltageSource::Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double /* dt */, int vsIndex) {
+    void VoltageSource::Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double /* dt */, int vsIndex, double time) {
         int i = (m_Node1 && m_Node1->Id > 0) ? m_Node1->Id - 1 : -1;
         int j = (m_Node2 && m_Node2->Id > 0) ? m_Node2->Id - 1 : -1;
         
@@ -17,8 +14,8 @@ namespace ecim {
         if (i >= 0) G(vsIndex, i) += 1.0;
         if (j >= 0) G(vsIndex, j) -= 1.0;
 
-        // Set the voltage source value in I
-        I(vsIndex) += m_Voltage;
+        // Set the voltage source value in I using time-dependent voltage
+        I(vsIndex) += GetVoltage(time);
     }
 
     void VoltageSource::SetCurrent(double current) {

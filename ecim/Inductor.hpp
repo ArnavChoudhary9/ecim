@@ -9,7 +9,7 @@ namespace ecim {
 
     public:
         Inductor(double inductance);
-        void Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double dt, int vsIndex) override;
+        void Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double dt, int vsIndex, double time = 0.0) override;
         void UpdateState();
         double GetCurrent() const;
     };

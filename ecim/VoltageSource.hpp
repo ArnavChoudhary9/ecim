@@ -3,13 +3,18 @@
 #include "Component.hpp"
 
 namespace ecim {
+    // Abstract base class for all voltage sources
     class VoltageSource : public Component {
-        double m_Voltage = 0.0;
+    protected:
         double m_Current = 0.0; // Current through the voltage source
 
     public:
-        VoltageSource(double voltage);
-        void Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double dt, int vsIndex) override;
+        virtual ~VoltageSource() {}
+        
+        // Get the voltage at a specific time
+        virtual double GetVoltage(double time) const = 0;
+        
+        void Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double dt, int vsIndex, double time = 0.0) override;
         void SetCurrent(double current);
         double GetCurrent() const;
     };

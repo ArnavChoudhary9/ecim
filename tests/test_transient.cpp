@@ -14,7 +14,7 @@ void runTransientTests(TestRunner& runner) {
         Node* node1 = new Node();
         Node* node2 = new Node();
         
-        VoltageSource* vs = new VoltageSource(5.0);
+        DCVoltageSource* vs = new DCVoltageSource(5.0);
         Resistor* res = new Resistor(1000.0);    // 1kΩ
         Capacitor* cap = new Capacitor(0.001);   // 1mF, τ = RC = 1s
         
@@ -46,7 +46,7 @@ void runTransientTests(TestRunner& runner) {
         Node* node1 = new Node();
         Node* node2 = new Node();
         
-        VoltageSource* vs = new VoltageSource(10.0);
+        DCVoltageSource* vs = new DCVoltageSource(10.0);
         Resistor* res = new Resistor(100.0);     // 100Ω
         Inductor* ind = new Inductor(0.1);       // 100mH, τ = L/R = 0.001s
         
@@ -69,7 +69,7 @@ void runTransientTests(TestRunner& runner) {
         Node* node1 = new Node();
         Node* node2 = new Node();
         
-        VoltageSource* vs = new VoltageSource(10.0);
+        DCVoltageSource* vs = new DCVoltageSource(10.0);
         Resistor* res = new Resistor(100.0);
         Inductor* ind = new Inductor(0.1);       // 100mH
         Capacitor* cap = new Capacitor(0.00001); // 10µF
@@ -100,7 +100,7 @@ void runTransientTests(TestRunner& runner) {
         Node* node1 = new Node();
         Node* node2 = new Node();
         
-        VoltageSource* vs = new VoltageSource(5.0);
+        DCVoltageSource* vs = new DCVoltageSource(5.0);
         Resistor* res = new Resistor(1000.0);
         Capacitor* cap = new Capacitor(0.001);
         
@@ -129,7 +129,7 @@ void runTransientTests(TestRunner& runner) {
         Node* gnd = new Node();
         Node* node1 = new Node();
         Resistor* res = new Resistor(100.0);
-        VoltageSource* vs = new VoltageSource(5.0);
+        DCVoltageSource* vs = new DCVoltageSource(5.0);
         
         ckt.AddComponent(vs, node1, gnd);
         ckt.AddComponent(res, node1, gnd);
@@ -151,7 +151,7 @@ void runTransientTests(TestRunner& runner) {
         Node* gnd = new Node();
         Node* node1 = new Node();
         Resistor* res = new Resistor(100.0);
-        VoltageSource* vs = new VoltageSource(5.0);
+        DCVoltageSource* vs = new DCVoltageSource(5.0);
         
         ckt.AddComponent(vs, node1, gnd);
         ckt.AddComponent(res, node1, gnd);
@@ -173,7 +173,7 @@ void runTransientTests(TestRunner& runner) {
         Node* gnd = new Node();
         Node* node1 = new Node();
         Resistor* res = new Resistor(100.0);
-        VoltageSource* vs = new VoltageSource(5.0);
+        DCVoltageSource* vs = new DCVoltageSource(5.0);
         
         ckt.AddComponent(vs, node1, gnd);
         ckt.AddComponent(res, node1, gnd);
@@ -189,7 +189,7 @@ void runTransientTests(TestRunner& runner) {
         r.assertEqual(ckt.GetCurrentTime(), 1e-9, 1e-12, "Small timestep should work");
     });
 
-    // Test RC time constant behavior
+    // Test RC time constant verification
     runner.runTest("Transient: RC time constant verification", [](TestRunner& r) {
         CircuitBuilder ckt;
         
@@ -198,7 +198,7 @@ void runTransientTests(TestRunner& runner) {
         Node* node2 = new Node();
         
         // τ = RC = 100Ω * 0.01F = 1 second
-        VoltageSource* vs = new VoltageSource(10.0);
+        DCVoltageSource* vs = new DCVoltageSource(10.0);
         Resistor* res = new Resistor(100.0);
         Capacitor* cap = new Capacitor(0.01);
         

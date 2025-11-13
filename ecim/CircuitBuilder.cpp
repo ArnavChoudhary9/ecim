@@ -34,6 +34,9 @@ namespace ecim {
 
     // Time-based simulation: step forward by deltaTime
     void CircuitBuilder::Step(double deltaTime) {
+        // Advance time first - we solve for the state at the new time
+        m_CurrentTime += deltaTime;
+        
         int N = 0;
         for (auto node : m_Nodes) {
             if (node->Id > N) N = node->Id;
@@ -54,21 +57,21 @@ namespace ecim {
         // Stamp resistors
         for (auto comp : m_Components) {
             if (auto resistor = dynamic_cast<Resistor*>(comp)) {
-                resistor->Stamp(G, I, deltaTime, -1);
+                resistor->Stamp(G, I, deltaTime, -1, m_CurrentTime);
             }
         }
 
         // Stamp capacitors
         for (auto comp : m_Components) {
             if (auto capacitor = dynamic_cast<Capacitor*>(comp)) {
-                capacitor->Stamp(G, I, deltaTime, -1);
+                capacitor->Stamp(G, I, deltaTime, -1, m_CurrentTime);
             }
         }
 
         // Stamp inductors
         for (auto comp : m_Components) {
             if (auto inductor = dynamic_cast<Inductor*>(comp)) {
-                inductor->Stamp(G, I, deltaTime, -1);
+                inductor->Stamp(G, I, deltaTime, -1, m_CurrentTime);
             }
         }
 
@@ -76,7 +79,7 @@ namespace ecim {
         int vsIndex = 0;
         for (auto comp : m_Components) {
             if (auto voltageSource = dynamic_cast<VoltageSource*>(comp)) {
-                voltageSource->Stamp(G, I, deltaTime, (N > 0 ? N - 1 : 0) + vsIndex);
+                voltageSource->Stamp(G, I, deltaTime, (N > 0 ? N - 1 : 0) + vsIndex, m_CurrentTime);
                 vsIndex++;
             }
         }
@@ -117,9 +120,6 @@ namespace ecim {
                 inductor->UpdateState();
             }
         }
-
-        // Advance time
-        m_CurrentTime += deltaTime;
     }
 
     // Simulate for a given duration with specified timestep

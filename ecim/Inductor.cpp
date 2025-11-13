@@ -10,7 +10,7 @@ namespace ecim {
     // Rearranging: I(t) = I(t-dt) + V(t) * dt / L
     // This is equivalent to: V(t) = (L/dt) * I(t) - (L/dt) * I(t-dt)
     // The inductor acts like a resistor (L/dt) with a voltage source -(L/dt)*I(t-dt)
-    void Inductor::Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double dt, int /* vsIndex */) {
+    void Inductor::Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double dt, int /* vsIndex */, double /* time */) {
         if (dt <= 0.0) return;
 
         double Req = m_Inductance / dt;  // Equivalent resistance
