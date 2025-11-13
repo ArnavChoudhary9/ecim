@@ -11,3 +11,4 @@
 #include "Inductor.hpp"
 #include "CircuitBuilder.hpp"
 #include "Probe.hpp"
+#include "ProbeManager.hpp"

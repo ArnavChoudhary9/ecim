@@ -37,6 +37,9 @@ namespace ecim {
         // Advance time first - we solve for the state at the new time
         m_CurrentTime += deltaTime;
         
+        // Update continuous probes before solving (will show pre-step state)
+        // Alternatively, move this after solving to show post-step state
+        
         int N = 0;
         for (auto node : m_Nodes) {
             if (node->Id > N) N = node->Id;
@@ -124,6 +127,9 @@ namespace ecim {
                 inductor->UpdateState();
             }
         }
+        
+        // Update continuous probes after solving (shows current state)
+        m_ProbeManager.UpdateContinuousProbes(m_CurrentTime);
     }
 
     // Simulate for a given duration with specified timestep
@@ -138,5 +144,14 @@ namespace ecim {
     // Reset simulation time
     void CircuitBuilder::ResetTime() {
         m_CurrentTime = 0.0;
+    }
+
+    // Probe management
+    ProbeManager& CircuitBuilder::GetProbeManager() {
+        return m_ProbeManager;
+    }
+
+    Probe* CircuitBuilder::AddProbe(const ProbeConfig& config) {
+        return m_ProbeManager.AddProbe(config);
     }
 }

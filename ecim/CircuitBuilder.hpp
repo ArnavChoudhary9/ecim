@@ -3,6 +3,7 @@
 #include <vector>
 #include "Component.hpp"
 #include "Node.hpp"
+#include "ProbeManager.hpp"
 
 namespace ecim {
     class VoltageSource;
@@ -14,6 +15,7 @@ namespace ecim {
         std::vector<Component*> m_Components;
         std::vector<Node*> m_Nodes;
         double m_CurrentTime = 0.0;
+        ProbeManager m_ProbeManager;
 
     public:
         ~CircuitBuilder();
@@ -23,5 +25,9 @@ namespace ecim {
         void Step(double deltaTime);
         void Simulate(double duration, double deltaTime);
         void ResetTime();
+        
+        // Probe management
+        ProbeManager& GetProbeManager();
+        Probe* AddProbe(const ProbeConfig& config);
     };
 }
