@@ -21,8 +21,8 @@ int main() {
     ckt.AddComponent(r1, node1, node2);  // 2kΩ between node1 and node2
     ckt.AddComponent(r2, node2, gnd);    // 3kΩ between node2 and ground
 
-    // Solve the circuit
-    ckt.Solve();
+    // Step the circuit to get initial voltages
+    ckt.Step(1e-6);
 
     // Probes for voltages at node1 and node2
     Probe p1(node1), p2(node2);

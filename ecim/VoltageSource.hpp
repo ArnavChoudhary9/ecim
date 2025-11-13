@@ -9,7 +9,7 @@ namespace ecim {
 
     public:
         VoltageSource(double voltage);
-        void Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, int vsIndex) override;
+        void Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double dt, int vsIndex) override;
         void SetCurrent(double current);
         double GetCurrent() const;
     };

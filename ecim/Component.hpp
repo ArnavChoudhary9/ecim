@@ -16,6 +16,6 @@ namespace ecim {
             m_Node2 = node2;
         }
 
-        virtual void Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, int vsIndex) = 0;
+        virtual void Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double dt, int vsIndex) = 0;
     };
 }

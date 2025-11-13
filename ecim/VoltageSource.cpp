@@ -4,7 +4,7 @@ namespace ecim {
     VoltageSource::VoltageSource(double voltage) 
         : m_Voltage(voltage), m_Current(0.0) {}
 
-    void VoltageSource::Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, int vsIndex) {
+    void VoltageSource::Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double /* dt */, int vsIndex) {
         int i = (m_Node1 && m_Node1->Id > 0) ? m_Node1->Id - 1 : -1;
         int j = (m_Node2 && m_Node2->Id > 0) ? m_Node2->Id - 1 : -1;
         

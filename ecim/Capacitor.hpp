@@ -10,8 +10,7 @@ namespace ecim {
 
     public:
         Capacitor(double capacitance);
-        void Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, int vsIndex) override;
-        void StampTransient(Eigen::MatrixXd &G, Eigen::VectorXd &I, double dt);
+        void Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double dt, int vsIndex) override;
         void UpdateState();
         double GetCurrent() const;
         void SetCurrent(double current);

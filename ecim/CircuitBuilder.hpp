@@ -18,7 +18,6 @@ namespace ecim {
     public:
         ~CircuitBuilder();
         void AddComponent(Component *component, Node *node1, Node *node2);
-        void Solve();
         const std::vector<Node*>& GetNodes() const;
         double GetCurrentTime() const;
         void Step(double deltaTime);
