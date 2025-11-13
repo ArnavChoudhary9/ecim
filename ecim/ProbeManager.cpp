@@ -21,6 +21,7 @@ namespace ecim {
         
         m_Probes.push_back(probe);
         m_Configs.push_back(config);
+        m_HeaderWritten.push_back(false);  // CSV header not yet written
         
         return probe;
     }
@@ -36,35 +37,44 @@ namespace ecim {
             Probe* probe = m_Probes[i];
             std::ostream& out = *config.stream;
             
-            // Format output
-            out << std::fixed << std::setprecision(6);
-            out << "t=" << time << "s";
-            
-            if (!config.label.empty()) {
-                out << " [" << config.label << "]";
-            }
-            
-            // Output based on mode
-            switch (config.mode) {
-                case ProbeMode::Voltage:
-                    out << " V=" << probe->Voltage() << "V";
-                    break;
-                    
-                case ProbeMode::Current:
-                    out << " I=" << probe->Current() << "A";
-                    break;
-                    
-                case ProbeMode::Both:
-                    if (config.node) {
+            if (config.format == ProbeOutputFormat::CSV) {
+                // CSV format
+                if (!m_HeaderWritten[i]) {
+                    WriteCSVHeader(i, out);
+                    m_HeaderWritten[i] = true;
+                }
+                WriteCSVData(i, probe, time, out);
+            } else {
+                // Standard format
+                out << std::fixed << std::setprecision(6);
+                out << "t=" << time << "s";
+                
+                if (!config.label.empty()) {
+                    out << " [" << config.label << "]";
+                }
+                
+                // Output based on mode
+                switch (config.mode) {
+                    case ProbeMode::Voltage:
                         out << " V=" << probe->Voltage() << "V";
-                    }
-                    if (config.component) {
+                        break;
+                        
+                    case ProbeMode::Current:
                         out << " I=" << probe->Current() << "A";
-                    }
-                    break;
+                        break;
+                        
+                    case ProbeMode::Both:
+                        if (config.node) {
+                            out << " V=" << probe->Voltage() << "V";
+                        }
+                        if (config.component) {
+                            out << " I=" << probe->Current() << "A";
+                        }
+                        break;
+                }
+                
+                out << std::endl;
             }
-            
-            out << std::endl;
         }
     }
 
@@ -78,5 +88,83 @@ namespace ecim {
         }
         m_Probes.clear();
         m_Configs.clear();
+        m_HeaderWritten.clear();
+    }
+
+    void ProbeManager::WriteCSVHeader(size_t probeIndex, std::ostream& out) {
+        const ProbeConfig& config = m_Configs[probeIndex];
+        
+        // Write column headers
+        out << "time";
+        
+        switch (config.mode) {
+            case ProbeMode::Voltage:
+                if (!config.label.empty()) {
+                    out << "," << config.label << "_voltage";
+                } else {
+                    out << ",voltage";
+                }
+                break;
+                
+            case ProbeMode::Current:
+                if (!config.label.empty()) {
+                    out << "," << config.label << "_current";
+                } else {
+                    out << ",current";
+                }
+                break;
+                
+            case ProbeMode::Both:
+                if (!config.label.empty()) {
+                    if (config.node) {
+                        out << "," << config.label << "_voltage";
+                    }
+                    if (config.component) {
+                        out << "," << config.label << "_current";
+                    }
+                } else {
+                    if (config.node) {
+                        out << ",voltage";
+                    }
+                    if (config.component) {
+                        out << ",current";
+                    }
+                }
+                break;
+        }
+        
+        out << std::endl;
+    }
+
+    void ProbeManager::WriteCSVData(size_t probeIndex, Probe* probe, double time, std::ostream& out) {
+        const ProbeConfig& config = m_Configs[probeIndex];
+        
+        // Set precision for CSV output
+        out << std::fixed << std::setprecision(9);
+        
+        // Write time
+        out << time;
+        
+        // Write probe data based on mode
+        switch (config.mode) {
+            case ProbeMode::Voltage:
+                out << "," << probe->Voltage();
+                break;
+                
+            case ProbeMode::Current:
+                out << "," << probe->Current();
+                break;
+                
+            case ProbeMode::Both:
+                if (config.node) {
+                    out << "," << probe->Voltage();
+                }
+                if (config.component) {
+                    out << "," << probe->Current();
+                }
+                break;
+        }
+        
+        out << std::endl;
     }
 }
