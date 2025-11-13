@@ -125,7 +125,8 @@ namespace ecim {
     // Simulate for a given duration with specified timestep
     void CircuitBuilder::Simulate(double duration, double deltaTime) {
         double endTime = m_CurrentTime + duration;
-        while (m_CurrentTime < endTime) {
+        const double epsilon = deltaTime * 0.01; // Small tolerance for floating point comparison
+        while (m_CurrentTime < endTime - epsilon) {
             Step(deltaTime);
         }
     }

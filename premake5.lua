@@ -66,6 +66,46 @@ project "ecim"
 
    filter {}
 
+-- Test project
+project "ecim_tests"
+   kind "ConsoleApp"
+   language "C++"
+   cppdialect "C++17"
+   targetdir "bin/%{cfg.buildcfg}"
+   objdir "obj/%{cfg.buildcfg}/tests"
+
+   -- Include test files and all ecim source files (excluding main.cpp)
+   files { 
+      "tests/test_runner.cpp",
+      "tests/test_components.cpp",
+      "tests/test_circuits.cpp",
+      "tests/test_transient.cpp",
+      "ecim/**.cpp", 
+      "ecim/**.hpp", 
+      "ecim/**.h" 
+   }
+
+   includedirs {
+      "ecim",
+      resolve_eigen_include(),
+   }
+
+   -- Add system-specific settings
+   filter "system:windows"
+      systemversion "latest"
+      defines { "_CRT_SECURE_NO_WARNINGS" }
+
+   filter "system:linux"
+      pic "On"
+
+   filter "configurations:Debug"
+      symbols "On"
+
+   filter "configurations:Release"
+      optimize "Full"
+
+   filter {}
+
 -- Helper action to print recommended commands
 newaction {
    trigger = "eigen-status",
