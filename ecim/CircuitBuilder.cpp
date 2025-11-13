@@ -57,21 +57,24 @@ namespace ecim {
         // Stamp resistors
         for (auto comp : m_Components) {
             if (auto resistor = dynamic_cast<Resistor*>(comp)) {
-                resistor->Stamp(G, I, deltaTime, -1, m_CurrentTime);
+                SimulationState state{G, I, deltaTime, -1, m_CurrentTime};
+                resistor->Stamp(state);
             }
         }
 
         // Stamp capacitors
         for (auto comp : m_Components) {
             if (auto capacitor = dynamic_cast<Capacitor*>(comp)) {
-                capacitor->Stamp(G, I, deltaTime, -1, m_CurrentTime);
+                SimulationState state{G, I, deltaTime, -1, m_CurrentTime};
+                capacitor->Stamp(state);
             }
         }
 
         // Stamp inductors
         for (auto comp : m_Components) {
             if (auto inductor = dynamic_cast<Inductor*>(comp)) {
-                inductor->Stamp(G, I, deltaTime, -1, m_CurrentTime);
+                SimulationState state{G, I, deltaTime, -1, m_CurrentTime};
+                inductor->Stamp(state);
             }
         }
 
@@ -79,7 +82,8 @@ namespace ecim {
         int vsIndex = 0;
         for (auto comp : m_Components) {
             if (auto voltageSource = dynamic_cast<VoltageSource*>(comp)) {
-                voltageSource->Stamp(G, I, deltaTime, (N > 0 ? N - 1 : 0) + vsIndex, m_CurrentTime);
+                SimulationState state{G, I, deltaTime, (N > 0 ? N - 1 : 0) + vsIndex, m_CurrentTime};
+                voltageSource->Stamp(state);
                 vsIndex++;
             }
         }

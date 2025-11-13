@@ -3,7 +3,7 @@
 namespace ecim {
     Resistor::Resistor(double resistance) : m_Resistance(resistance) {}
 
-    void Resistor::Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double /* dt */, int /* vsIndex */, double /* time */) {
+    void Resistor::Stamp(SimulationState &state) {
         double G_val = 1.0 / m_Resistance;
 
         // Skip ground node (node ID 0)
@@ -11,13 +11,13 @@ namespace ecim {
         int j = (m_Node2 && m_Node2->Id > 0) ? m_Node2->Id - 1 : -1;
 
         // Diagonal contributions
-        if (i >= 0) G(i, i) += G_val;
-        if (j >= 0) G(j, j) += G_val;
+        if (i >= 0) state.G(i, i) += G_val;
+        if (j >= 0) state.G(j, j) += G_val;
 
         // Off-diagonal contributions
         if (i >= 0 && j >= 0) {
-            G(i, j) -= G_val;
-            G(j, i) -= G_val;
+            state.G(i, j) -= G_val;
+            state.G(j, i) -= G_val;
         }
 
         // No current source contribution for resistors

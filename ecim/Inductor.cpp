@@ -10,28 +10,28 @@ namespace ecim {
     // Rearranging: I(t) = I(t-dt) + V(t) * dt / L
     // This is equivalent to: V(t) = (L/dt) * I(t) - (L/dt) * I(t-dt)
     // The inductor acts like a resistor (L/dt) with a voltage source -(L/dt)*I(t-dt)
-    void Inductor::Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double dt, int /* vsIndex */, double /* time */) {
-        if (dt <= 0.0) return;
+    void Inductor::Stamp(SimulationState &state) {
+        if (state.dt <= 0.0) return;
 
-        double Req = m_Inductance / dt;  // Equivalent resistance
-        double Veq = Req * m_Current;     // Equivalent voltage source
+        double Req = m_Inductance / state.dt;  // Equivalent resistance
+        double Veq = Req * m_Current;          // Equivalent voltage source
 
         int i = (m_Node1 && m_Node1->Id > 0) ? m_Node1->Id - 1 : -1;
         int j = (m_Node2 && m_Node2->Id > 0) ? m_Node2->Id - 1 : -1;
 
         // Add equivalent resistance (like resistor)
         double G_val = 1.0 / Req;
-        if (i >= 0) G(i, i) += G_val;
-        if (j >= 0) G(j, j) += G_val;
+        if (i >= 0) state.G(i, i) += G_val;
+        if (j >= 0) state.G(j, j) += G_val;
         if (i >= 0 && j >= 0) {
-            G(i, j) -= G_val;
-            G(j, i) -= G_val;
+            state.G(i, j) -= G_val;
+            state.G(j, i) -= G_val;
         }
 
         // Add equivalent voltage source (like current source)
         double Ieq = Veq / Req;  // Convert to current
-        if (i >= 0) I(i) -= Ieq;
-        if (j >= 0) I(j) += Ieq;
+        if (i >= 0) state.I(i) -= Ieq;
+        if (j >= 0) state.I(j) += Ieq;
     }
 
     void Inductor::UpdateState() {

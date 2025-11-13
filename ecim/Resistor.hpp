@@ -8,7 +8,7 @@ namespace ecim {
 
     public:
         Resistor(double resistance);
-        void Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double dt, int vsIndex, double time = 0.0) override;
+        void Stamp(SimulationState &state) override;
         double GetCurrent() const;
     };
 }

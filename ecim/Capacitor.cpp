@@ -10,26 +10,26 @@ namespace ecim {
     // Rearranging: V(t) = V(t-dt) + I(t) * dt / C
     // This is equivalent to: I(t) = (C/dt) * V(t) - (C/dt) * V(t-dt)
     // Which looks like a conductance (C/dt) with a current source -(C/dt)*V(t-dt)
-    void Capacitor::Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double dt, int /* vsIndex */, double /* time */) {
-        if (dt <= 0.0) return;
+    void Capacitor::Stamp(SimulationState &state) {
+        if (state.dt <= 0.0) return;
 
-        double Geq = m_Capacitance / dt;  // Equivalent conductance
-        double Ieq = Geq * m_Voltage;      // Equivalent current source
+        double Geq = m_Capacitance / state.dt;  // Equivalent conductance
+        double Ieq = Geq * m_Voltage;           // Equivalent current source
 
         int i = (m_Node1 && m_Node1->Id > 0) ? m_Node1->Id - 1 : -1;
         int j = (m_Node2 && m_Node2->Id > 0) ? m_Node2->Id - 1 : -1;
 
         // Add equivalent conductance (like resistor)
-        if (i >= 0) G(i, i) += Geq;
-        if (j >= 0) G(j, j) += Geq;
+        if (i >= 0) state.G(i, i) += Geq;
+        if (j >= 0) state.G(j, j) += Geq;
         if (i >= 0 && j >= 0) {
-            G(i, j) -= Geq;
-            G(j, i) -= Geq;
+            state.G(i, j) -= Geq;
+            state.G(j, i) -= Geq;
         }
 
         // Add equivalent current source
-        if (i >= 0) I(i) += Ieq;
-        if (j >= 0) I(j) -= Ieq;
+        if (i >= 0) state.I(i) += Ieq;
+        if (j >= 0) state.I(j) -= Ieq;
     }
 
     void Capacitor::UpdateState() {

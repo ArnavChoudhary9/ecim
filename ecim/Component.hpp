@@ -4,6 +4,14 @@
 #include "Node.hpp"
 
 namespace ecim {
+    struct SimulationState {
+        Eigen::MatrixXd &G;      // Conductance matrix
+        Eigen::VectorXd &I;      // Current vector
+        double dt;               // Time step
+        int vsIndex;             // Voltage source index
+        double time;             // Current simulation time
+    };
+
     class Component {
     protected:
         Node *m_Node1 = nullptr, *m_Node2 = nullptr;
@@ -16,6 +24,6 @@ namespace ecim {
             m_Node2 = node2;
         }
 
-        virtual void Stamp(Eigen::MatrixXd &G, Eigen::VectorXd &I, double dt, int vsIndex, double time = 0.0) = 0;
+        virtual void Stamp(SimulationState &state) = 0;
     };
 }
