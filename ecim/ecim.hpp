@@ -1,3 +1,8 @@
 #pragma once
 
-// ECIM main header file
+#include "Node.hpp"
+#include "Component.hpp"
+#include "VoltageSource.hpp"
+#include "Resistor.hpp"
+#include "CircuitBuilder.hpp"
+#include "Probe.hpp"
