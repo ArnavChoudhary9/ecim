@@ -5,6 +5,7 @@
 namespace ecim {
     class VoltageSource : public Component {
         double m_Voltage = 0.0;
+        double m_Current = 0.0; // Current through the voltage source
 
     public:
         VoltageSource(double voltage) : m_Voltage(voltage) {}
@@ -25,6 +26,14 @@ namespace ecim {
 
             // Set the voltage source value in I
             I(vsIndex) += m_Voltage;
+        }
+        
+        void SetCurrent(double current) {
+            m_Current = current;
+        }
+        
+        double GetCurrent() const {
+            return m_Current;
         }
     };
 }

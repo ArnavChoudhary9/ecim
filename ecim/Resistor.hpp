@@ -28,5 +28,12 @@ namespace ecim {
 
             // No current source contribution for resistors
         }
+        
+        // Calculate current through resistor using Ohm's law: I = (V1 - V2) / R
+        // Current flows from m_Node1 to m_Node2
+        double GetCurrent() const {
+            if (!m_Node1 || !m_Node2) return 0.0;
+            return (m_Node1->Voltage - m_Node2->Voltage) / m_Resistance;
+        }
     };
 }

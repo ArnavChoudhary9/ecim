@@ -80,6 +80,18 @@ namespace ecim {
                     }
                 }
             }
+            
+            // Extract voltage source currents from solution vector
+            vsIndex = 0;
+            for (auto comp : m_Components) {
+                if (auto voltageSource = dynamic_cast<VoltageSource*>(comp)) {
+                    int currentIdx = (N > 0 ? N - 1 : 0) + vsIndex;
+                    if (currentIdx >= 0 && currentIdx < V.size()) {
+                        voltageSource->SetCurrent(V(currentIdx));
+                    }
+                    vsIndex++;
+                }
+            }
         }
 
         const std::vector<Node*>& GetNodes() const {
